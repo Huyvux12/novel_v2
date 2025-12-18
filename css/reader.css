@@ -1,0 +1,442 @@
+/* ========================================
+   READER PAGE STYLES
+   ======================================== */
+
+/* Reader Themes */
+.reader-light {
+    --reader-bg: #f4f4f4;
+    --reader-text: #1f2937;
+    --reader-panel: #ffffff;
+    --reader-border: #e5e7eb;
+}
+
+.reader-sepia {
+    --reader-bg: #f4ecd8;
+    --reader-text: #5b4636;
+    --reader-panel: #fdf6e3;
+    --reader-border: #eaddc5;
+}
+
+.reader-dark {
+    --reader-bg: #1a1a1a;
+    --reader-text: #bfbfbf;
+    --reader-panel: #2a2a2a;
+    --reader-border: #333333;
+}
+
+/* Reader Container */
+.reader-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--reader-bg);
+    color: var(--reader-text);
+    transition: all 0.3s ease;
+}
+
+/* Reader Toolbar */
+.reader-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--reader-panel);
+    border-bottom: 1px solid var(--reader-border);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.toolbar-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.toolbar-back {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.toolbar-back:hover {
+    opacity: 0.8;
+}
+
+.toolbar-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.toolbar-novel {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.7;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
+.toolbar-chapter {
+    font-size: 0.875rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+.toolbar-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.toolbar-btn {
+    padding: 0.5rem;
+    border-radius: 50%;
+    color: var(--reader-text);
+    transition: background 0.2s;
+}
+
+.toolbar-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.reader-dark .toolbar-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Settings Panel */
+.settings-panel {
+    position: fixed;
+    top: 56px;
+    right: 1rem;
+    z-index: 100;
+    background: var(--reader-panel);
+    border: 1px solid var(--reader-border);
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    width: 280px;
+    padding: 1rem;
+}
+
+.settings-group {
+    margin-bottom: 1.25rem;
+}
+
+.settings-group:last-child {
+    margin-bottom: 0;
+}
+
+.settings-label {
+    display: block;
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.7;
+    margin-bottom: 0.5rem;
+}
+
+/* Theme Buttons */
+.theme-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.theme-btn {
+    flex: 1;
+    height: 40px;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.theme-btn:hover,
+.theme-btn.active {
+    border-color: #6366f1;
+}
+
+.theme-btn-light {
+    background: #f4f4f4;
+    color: #1f2937;
+    border-color: #d1d5db;
+}
+
+.theme-btn-sepia {
+    background: #f4ecd8;
+    color: #5b4636;
+    border-color: #d3cbbd;
+}
+
+.theme-btn-dark {
+    background: #1a1a1a;
+    color: #bfbfbf;
+    border-color: #4b5563;
+}
+
+/* Font Size Slider */
+.font-size-slider {
+    width: 100%;
+    height: 8px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--reader-border);
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+}
+
+.font-size-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #6366f1;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.font-size-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+.font-size-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #6366f1;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+/* Font Family Select */
+.font-select {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--reader-border);
+    background: var(--reader-bg);
+    color: var(--reader-text);
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.font-select:focus {
+    outline: none;
+    border-color: #6366f1;
+}
+
+/* Reader Content */
+.reader-content {
+    flex: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 2rem 1rem 3rem;
+}
+
+@media (min-width: 768px) {
+    .reader-content {
+        padding: 3rem 2rem;
+    }
+}
+
+.chapter-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 2rem;
+    line-height: 1.3;
+}
+
+@media (min-width: 768px) {
+    .chapter-title {
+        font-size: 1.875rem;
+    }
+}
+
+.chapter-body {
+    text-align: justify;
+    white-space: pre-line;
+}
+
+.chapter-body p {
+    margin-bottom: 1em;
+}
+
+.chapter-body h1,
+.chapter-body h2,
+.chapter-body h3 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+.chapter-body strong {
+    font-weight: 700;
+}
+
+.chapter-body em {
+    font-style: italic;
+}
+
+/* Font Families */
+.font-sans {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.font-serif {
+    font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+}
+
+.font-mono {
+    font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+}
+
+/* Reader Navigation */
+.reader-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--reader-border);
+}
+
+.nav-btn {
+    flex: 1;
+    max-width: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    transition: all 0.2s;
+}
+
+.nav-btn-primary {
+    background: #6366f1;
+    color: white;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+}
+
+.nav-btn-primary:hover {
+    background: #4f46e5;
+}
+
+.nav-btn-primary:disabled {
+    background: #d1d5db;
+    color: #9ca3af;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+.reader-dark .nav-btn-primary:disabled {
+    background: #374151;
+    color: #6b7280;
+}
+
+.nav-btn-secondary {
+    padding: 0.75rem;
+    border: 1px solid var(--reader-border);
+    border-radius: 0.5rem;
+}
+
+.nav-btn-secondary:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.reader-dark .nav-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Reader Footer */
+.reader-footer {
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    opacity: 0.6;
+    border-top: 1px solid var(--reader-border);
+}
+
+/* Table of Contents Modal */
+.toc-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 1rem;
+}
+
+.toc-content {
+    background: var(--reader-panel);
+    border-radius: 0.75rem;
+    width: 100%;
+    max-width: 500px;
+    max-height: 70vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.toc-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--reader-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toc-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+.toc-close {
+    padding: 0.5rem;
+    color: var(--reader-text);
+    opacity: 0.6;
+}
+
+.toc-close:hover {
+    opacity: 1;
+}
+
+.toc-list {
+    overflow-y: auto;
+    padding: 0.5rem 0;
+}
+
+.toc-item {
+    display: block;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    transition: background 0.2s;
+}
+
+.toc-item:hover {
+    background: rgba(99, 102, 241, 0.1);
+    color: #6366f1;
+}
+
+.toc-item.active {
+    background: rgba(99, 102, 241, 0.1);
+    color: #6366f1;
+    font-weight: 600;
+}

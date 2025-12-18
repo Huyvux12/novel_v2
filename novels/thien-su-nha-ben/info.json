@@ -1,0 +1,36 @@
+{
+    "id": "thien-su-nha-ben",
+    "title": "Thiên Sứ Nhà Bên",
+    "author": "Saekisan",
+    "description": "Fujimiya Amane sống một mình tại căn hộ mới thuê. Căn hộ bên cạnh là nơi ở của thiên sứ xinh đẹp nhất trường, Shiina Mahiru. Hai người vốn chẳng có liên hệ gì với nhau, cho đến một ngày mưa, Amane thấy Mahiru ngồi thu lu một mình ở công viên. Từ đó, cuộc sống hàng ngày của Amane bắt đầu thay đổi khi cô gái hoàn hảo ấy xuất hiện trong cuộc đời cậu.",
+    "cover": "https://i.pinimg.com/564x/d8/50/22/d85022026852230787e452140b9041f0.jpg",
+    "genres": [
+        "Romance",
+        "School Life",
+        "Slice of Life",
+        "Comedy"
+    ],
+    "status": "Đang tiến hành",
+    "views": "1.2M",
+    "follows": "45K",
+    "chapters": [
+        {
+            "number": 1,
+            "title": "Chương 1: Cuộc gặp gỡ dưới mưa",
+            "file": "chap1.md",
+            "date": "2025-01-01"
+        },
+        {
+            "number": 2,
+            "title": "Chương 2: Chăm sóc người ốm",
+            "file": "chap2.md",
+            "date": "2025-01-02"
+        },
+        {
+            "number": 3,
+            "title": "Chương 3: Bữa tối đầu tiên",
+            "file": "chap3.md",
+            "date": "2025-01-03"
+        }
+    ]
+}

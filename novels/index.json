@@ -1,0 +1,82 @@
+{
+  "novels": [
+    {
+      "id": "thien-su-nha-ben",
+      "title": "Thiên Sứ Nhà Bên",
+      "author": "Saekisan",
+      "description": "Fujimiya Amane sống một mình tại căn hộ mới thuê. Căn hộ bên cạnh là nơi ở của thiên sứ xinh đẹp nhất trường, Shiina Mahiru. Hai người vốn chẳng có liên hệ gì với nhau, cho đến một ngày mưa...",
+      "cover": "https://i.pinimg.com/564x/d8/50/22/d85022026852230787e452140b9041f0.jpg",
+      "genres": ["Romance", "School Life", "Slice of Life"],
+      "status": "Đang tiến hành",
+      "views": "1.2M",
+      "follows": "45K",
+      "lastUpdate": "2 giờ trước",
+      "chapters": [
+        {
+          "number": 1,
+          "title": "Chương 1: Cuộc gặp gỡ dưới mưa",
+          "file": "chap1.md",
+          "date": "2025-01-01"
+        },
+        {
+          "number": 2,
+          "title": "Chương 2: Chăm sóc người ốm",
+          "file": "chap2.md",
+          "date": "2025-01-02"
+        },
+        {
+          "number": 3,
+          "title": "Chương 3: Bữa tối đầu tiên",
+          "file": "chap3.md",
+          "date": "2025-01-03"
+        }
+      ]
+    },
+    {
+      "id": "shadow-eminence",
+      "title": "Ta Muốn Trở Thành Chúa Tể Bóng Tối",
+      "author": "Aizawa Daisuke",
+      "description": "Cid Kagenou có một ước mơ. Không phải trở thành nhân vật chính, cũng chẳng phải trùm cuối. Cậu muốn trở thành kẻ đứng trong bóng tối, giật dây mọi chuyện...",
+      "cover": "https://i.pinimg.com/564x/a4/09/bc/a409bc2531742416f40b2866297371d7.jpg",
+      "genres": ["Action", "Fantasy", "Comedy", "Isekai"],
+      "status": "Đang tiến hành",
+      "views": "2.5M",
+      "follows": "80K",
+      "lastUpdate": "5 giờ trước",
+      "chapters": [
+        {
+          "number": 1,
+          "title": "Chương 1: Khởi đầu của Shadow",
+          "file": "chap1.md",
+          "date": "2025-01-01"
+        },
+        {
+          "number": 2,
+          "title": "Chương 2: Seven Shadows",
+          "file": "chap2.md",
+          "date": "2025-01-02"
+        }
+      ]
+    },
+    {
+      "id": "mushoku-tensei",
+      "title": "Thất Nghiệp Chuyển Sinh",
+      "author": "Rifujin na Magonote",
+      "description": "Một NEET 34 tuổi bị đuổi khỏi nhà và gặp tai nạn xe tải. Khi tỉnh lại, cậu nhận ra mình đã đầu thai vào một thế giới kiếm và ma thuật dưới cái tên Rudeus Greyrat...",
+      "cover": "https://i.pinimg.com/564x/73/0e/43/730e43d183866380c58e826b54130095.jpg",
+      "genres": ["Adventure", "Drama", "Fantasy", "Seinen"],
+      "status": "Đã hoàn thành",
+      "views": "5M",
+      "follows": "120K",
+      "lastUpdate": "1 ngày trước",
+      "chapters": [
+        {
+          "number": 1,
+          "title": "Chương 1: Thế giới mới",
+          "file": "chap1.md",
+          "date": "2025-01-01"
+        }
+      ]
+    }
+  ]
+}

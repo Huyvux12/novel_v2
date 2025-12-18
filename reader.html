@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Đọc truyện trên DocLN Clone">
+    <title>Đọc truyện - DocLN Clone</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@13/dist/markdown-it.min.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/reader.css">
+</head>
+
+<body>
+    <!-- Reader Page Container -->
+    <div class="reader-page reader-light" id="readerPage">
+
+        <!-- Toolbar -->
+        <header class="reader-toolbar">
+            <div class="toolbar-container">
+                <div class="toolbar-back" id="backBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                    <div class="toolbar-info">
+                        <span class="toolbar-novel" id="toolbarNovel">Tên truyện</span>
+                        <span class="toolbar-chapter" id="toolbarChapter">Tên chương</span>
+                    </div>
+                </div>
+
+                <div class="toolbar-actions">
+                    <button class="toolbar-btn" id="tocBtn" title="Mục lục">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                        </svg>
+                    </button>
+                    <button class="toolbar-btn" id="settingsBtn" title="Cài đặt">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Settings Panel -->
+        <div class="settings-panel hidden" id="settingsPanel">
+            <!-- Theme -->
+            <div class="settings-group">
+                <label class="settings-label">Màu nền</label>
+                <div class="theme-buttons">
+                    <button class="theme-btn theme-btn-light active" data-theme="light">Sáng</button>
+                    <button class="theme-btn theme-btn-sepia" data-theme="sepia">Vàng</button>
+                    <button class="theme-btn theme-btn-dark" data-theme="dark">Tối</button>
+                </div>
+            </div>
+
+            <!-- Font Size -->
+            <div class="settings-group">
+                <label class="settings-label">Cỡ chữ: <span id="fontSizeValue">18</span>px</label>
+                <input type="range" class="font-size-slider" id="fontSizeSlider" min="14" max="28" step="1" value="18">
+            </div>
+
+            <!-- Font Family -->
+            <div class="settings-group">
+                <label class="settings-label">Font chữ</label>
+                <select class="font-select" id="fontSelect">
+                    <option value="font-sans">Không chân (Sans Serif)</option>
+                    <option value="font-serif">Có chân (Serif)</option>
+                    <option value="font-mono">Monospace</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Chapter Content -->
+        <article class="reader-content" id="readerContent">
+            <h1 class="chapter-title" id="chapterTitle">Đang tải...</h1>
+            <div class="chapter-body font-sans" id="chapterBody">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="reader-nav">
+                <button class="nav-btn nav-btn-primary" id="prevBtn" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                    Trước
+                </button>
+
+                <button class="nav-btn nav-btn-secondary" id="tocNavBtn" title="Mục lục">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                </button>
+
+                <button class="nav-btn nav-btn-primary" id="nextBtn" disabled>
+                    Tiếp
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </nav>
+        </article>
+
+        <!-- Footer -->
+        <footer class="reader-footer">
+            © 2024 DocLN Clone. Happy Reading!
+        </footer>
+    </div>
+
+    <!-- Table of Contents Modal -->
+    <div class="toc-modal hidden" id="tocModal">
+        <div class="toc-content">
+            <div class="toc-header">
+                <h3 class="toc-title">Mục lục</h3>
+                <button class="toc-close" id="tocClose">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="toc-list" id="tocList"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/reader.js"></script>
+</body>
+
+</html>

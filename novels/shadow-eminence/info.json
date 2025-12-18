@@ -1,0 +1,30 @@
+{
+    "id": "shadow-eminence",
+    "title": "Ta Muốn Trở Thành Chúa Tể Bóng Tối",
+    "author": "Aizawa Daisuke",
+    "description": "Cid Kagenou có một ước mơ. Không phải trở thành nhân vật chính, cũng chẳng phải trùm cuối. Cậu muốn trở thành kẻ đứng trong bóng tối, giật dây mọi chuyện và thể hiện sức mạnh tuyệt đối khi cần thiết. Một ngày nọ, cậu bị tai nạn và chuyển sinh sang thế giới khác. Tại đây, cậu bắt đầu xây dựng tổ chức Shadow Garden để thực hiện ước mơ của mình.",
+    "cover": "https://i.pinimg.com/564x/a4/09/bc/a409bc2531742416f40b2866297371d7.jpg",
+    "genres": [
+        "Action",
+        "Fantasy",
+        "Comedy",
+        "Isekai"
+    ],
+    "status": "Đang tiến hành",
+    "views": "2.5M",
+    "follows": "80K",
+    "chapters": [
+        {
+            "number": 1,
+            "title": "Chương 1: Khởi đầu của Shadow",
+            "file": "chap1.md",
+            "date": "2025-01-01"
+        },
+        {
+            "number": 2,
+            "title": "Chương 2: Seven Shadows",
+            "file": "chap2.md",
+            "date": "2025-01-02"
+        }
+    ]
+}
