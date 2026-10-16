@@ -6,6 +6,8 @@
 // ========================================
 // STATE MANAGEMENT
 // ========================================
+const U = window.NovelUtils;
+let detailRequest = 0;
 const state = {
   novels: [],
   filteredNovels: [],
@@ -80,7 +82,8 @@ async function loadNovels() {
     if (!response.ok) throw new Error('Failed to load novels');
     
     const data = await response.json();
-    state.novels = data.novels;
+    if (!Array.isArray(data.novels)) throw new Error('Invalid catalog');
+    state.novels = data.novels.map(U.normalizeNovel);
     state.filteredNovels = [...state.novels];
     
     renderHomePage();
@@ -103,7 +106,7 @@ async function loadNovelDetail(novelId) {
     // Update URL
     const url = new URL(window.location);
     url.searchParams.set('novel', novelId);
-    history.pushState({ novelId }, '', url);
+    if (pushHistory && new URL(location.href).searchParams.get('novel') !== novelId) history.pushState({ novelId }, '', url);
   } catch (error) {
     console.error('Error loading novel:', error);
     showError('Không thể tải thông tin truyện. Vui lòng thử lại.');
@@ -119,6 +122,7 @@ function renderHomePage() {
   elements.homeContent.classList.remove('hidden');
   
   const novels = state.filteredNovels;
+  const E = U.escapeHtml;
   
   elements.homeContent.innerHTML = `
     <!-- Featured Section -->
@@ -133,7 +137,7 @@ function renderHomePage() {
         <a href="#" class="section-link">Xem tất cả</a>
       </div>
       <div class="novel-grid">
-        ${novels.map(novel => renderNovelCard(novel)).join('')}
+        ${novels.length ? novels.map(novel => renderNovelCard(novel)).join('') : '<p class="empty-state">Không tìm thấy truyện phù hợp.</p>'}
       </div>
     </section>
     
@@ -174,7 +178,7 @@ function renderHomePage() {
             <button class="ranking-tab">Mọi lúc</button>
           </div>
           <ul class="ranking-list">
-            ${novels.slice(0, 5).map((novel, index) => renderRankingItem(novel, index)).join('')}
+            ${[...novels].sort((a,b) => U.readableCount(b.views) - U.readableCount(a.views)).slice(0, 5).map((novel, index) => renderRankingItem(novel, index)).join('')}
           </ul>
         </div>
       </section>
@@ -191,15 +195,15 @@ function renderNovelCard(novel) {
   const statusText = novel.status === 'Đang tiến hành' || novel.status === 'Đang ra' ? 'ON' : 'END';
   
   return `
-    <article class="novel-card" data-novel-id="${novel.id}">
+    <article class="novel-card" data-novel-id="${E(novel.id)}">
       <div class="novel-cover">
-        <img src="${novel.cover}" alt="${novel.title}" onerror="this.src='https://via.placeholder.com/200x300?text=No+Cover'">
+        <img src="${E(U.safeImageUrl(novel.cover))}" alt="${E(novel.title)}" loading="lazy">
         <span class="novel-status">${statusText}</span>
       </div>
       <div class="novel-info">
-        <h3 class="novel-title">${novel.title}</h3>
+        <h3 class="novel-title">${E(novel.title)}</h3>
         <div class="novel-genres">
-          ${novel.genres.slice(0, 2).map(g => `<span class="genre-tag">${g}</span>`).join('')}
+          ${novel.genres.slice(0, 2).map(g => `<span class="genre-tag">${E(g)}</span>`).join('')}
         </div>
         <div class="novel-meta">
           <span>
@@ -207,14 +211,14 @@ function renderNovelCard(novel) {
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
               <circle cx="12" cy="12" r="3"></circle>
             </svg>
-            ${novel.views || 'N/A'}
+            ${E(novel.views || 'N/A')}
           </span>
           <span>
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10"></circle>
               <polyline points="12 6 12 12 16 14"></polyline>
             </svg>
-            ${novel.lastUpdate || 'N/A'}
+            ${E(novel.lastUpdate || 'N/A')}
           </span>
         </div>
       </div>
@@ -226,21 +230,21 @@ function renderUpdateItem(novel) {
   const chapters = novel.chapters || [];
   
   return `
-    <article class="update-item" data-novel-id="${novel.id}">
+    <article class="update-item" data-novel-id="${E(novel.id)}">
       <div class="update-cover">
-        <img src="${novel.cover}" alt="${novel.title}">
+        <img src="${E(U.safeImageUrl(novel.cover))}" alt="${E(novel.title)}">
       </div>
       <div class="update-content">
-        <h3 class="update-title">${novel.title}</h3>
+        <h3 class="update-title">${E(novel.title)}</h3>
         <p class="update-author">
-          <span>${novel.genres[0]}</span>
-          • ${novel.author}
+          <span>${E(novel.genres[0] || '')}</span>
+          • ${E(novel.author)}
         </p>
         <div class="chapter-list">
           ${chapters.slice(0, 2).map(ch => `
             <div class="chapter-item">
-              <span class="chapter-title">${ch.title}</span>
-              <span class="chapter-time">${ch.date || '2 giờ trước'}</span>
+              <span class="chapter-title">${E(ch.title)}</span>
+              <span class="chapter-time">${E(ch.date || '')}</span>
             </div>
           `).join('')}
         </div>
@@ -253,11 +257,11 @@ function renderRankingItem(novel, index) {
   const rankClass = index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : '';
   
   return `
-    <li class="ranking-item" data-novel-id="${novel.id}">
+    <li class="ranking-item" data-novel-id="${E(novel.id)}">
       <span class="ranking-number ${rankClass}">${index + 1}</span>
       <div class="ranking-info">
-        <h4 class="ranking-title">${novel.title}</h4>
-        <span class="ranking-views">${novel.views || 'N/A'} views</span>
+        <h4 class="ranking-title">${E(novel.title)}</h4>
+        <span class="ranking-views">${E(novel.views || 'N/A')} views</span>
       </div>
     </li>
   `;
@@ -285,47 +289,47 @@ function renderDetailPage(novel) {
       <div class="novel-detail">
         <div class="novel-detail-inner">
           <div class="detail-cover">
-            <img src="${novel.cover}" alt="${novel.title}">
+            <img src="${E(U.safeImageUrl(novel.cover))}" alt="${E(novel.title)}">
           </div>
           <div class="detail-content">
-            <h1 class="detail-title">${novel.title}</h1>
+            <h1 class="detail-title">${E(novel.title)}</h1>
             <div class="detail-genres">
-              ${novel.genres.map(g => `<span class="detail-genre">${g}</span>`).join('')}
+              ${novel.genres.map(g => `<span class="detail-genre">${E(g)}</span>`).join('')}
             </div>
             
             <div class="detail-stats">
               <div class="stat-item">
                 <label>Tác giả</label>
-                <p>${novel.author}</p>
+                <p>${E(novel.author)}</p>
               </div>
               <div class="stat-item">
                 <label>Tình trạng</label>
-                <p class="${statusClass}">${novel.status}</p>
+                <p class="${statusClass}">${E(novel.status)}</p>
               </div>
               <div class="stat-item">
                 <label>Lượt xem</label>
-                <p>${novel.views || 'N/A'}</p>
+                <p>${E(novel.views || 'N/A')}</p>
               </div>
               <div class="stat-item">
                 <label>Theo dõi</label>
-                <p class="follows">${novel.follows || 'N/A'}</p>
+                <p class="follows">${E(novel.follows || 'N/A')}</p>
               </div>
             </div>
             
             <div class="synopsis">
               <h3>Tóm tắt</h3>
-              <p>${novel.description}</p>
+              <p>${E(novel.description)}</p>
             </div>
             
             <div class="detail-actions">
-              <a href="reader.html?novel=${novel.id}&chapter=1" class="btn btn-lg btn-primary">
+              <a href="reader.html?novel=${E(novel.id)}&chapter=${novel.chapters[0]?.number || 1}" class="btn btn-lg btn-primary">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                   <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                 </svg>
                 Đọc từ đầu
               </a>
-              <button class="btn btn-lg btn-follow">
+              <button class="btn btn-lg btn-follow" id="followButton" type="button" aria-pressed="false">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                 </svg>
@@ -350,9 +354,9 @@ function renderDetailPage(novel) {
         </h3>
         <div class="chapter-grid">
           ${novel.chapters.map((ch, idx) => `
-            <a href="reader.html?novel=${novel.id}&chapter=${idx + 1}" class="chapter-link">
-              <span class="chapter-name">${ch.title}</span>
-              <span class="chapter-date">${ch.date || '2 giờ trước'}</span>
+            <a href="reader.html?novel=${E(novel.id)}&chapter=${ch.number}" class="chapter-link">
+              <span class="chapter-name">${E(ch.title)}</span>
+              <span class="chapter-date">${E(ch.date || '')}</span>
             </a>
           `).join('')}
         </div>
@@ -362,6 +366,12 @@ function renderDetailPage(novel) {
   
   // Add back button handler
   document.getElementById('backToHomeBtn').addEventListener('click', goHome);
+  const follow = document.getElementById('followButton');
+  let saved = [];
+  try { saved = JSON.parse(U.readStorage('followedNovels','[]')); if (!Array.isArray(saved)) saved=[]; } catch (_) { saved=[]; }
+  function syncFollow(){ const active=saved.includes(novel.id); follow.setAttribute('aria-pressed',String(active)); follow.lastChild.textContent=active?' Đang theo dõi':' Theo dõi'; }
+  follow.addEventListener('click',()=>{saved=saved.includes(novel.id)?saved.filter(id=>id!==novel.id):[...saved,novel.id]; U.writeStorage('followedNovels',JSON.stringify(saved));syncFollow();});
+  syncFollow();
   
   state.currentView = 'detail';
   window.scrollTo(0, 0);
@@ -382,12 +392,12 @@ function addNovelClickHandlers() {
 
 function handleSearch(e) {
   e.preventDefault();
-  const term = elements.searchInput.value.trim().toLowerCase();
+  const term = elements.searchInput.value.trim().toLocaleLowerCase('vi');
   filterNovels(term);
 }
 
 function handleSearchInput(e) {
-  const term = e.target.value.trim().toLowerCase();
+  const term = e.target.value.trim().toLocaleLowerCase('vi');
   filterNovels(term);
 }
 
@@ -396,9 +406,9 @@ function filterNovels(term) {
     state.filteredNovels = [...state.novels];
   } else {
     state.filteredNovels = state.novels.filter(novel => 
-      novel.title.toLowerCase().includes(term) ||
-      novel.author.toLowerCase().includes(term) ||
-      novel.genres.some(g => g.toLowerCase().includes(term))
+      novel.title.toLocaleLowerCase('vi').includes(term) ||
+      novel.author.toLocaleLowerCase('vi').includes(term) ||
+      novel.genres.some(g => g.toLocaleLowerCase('vi').includes(term))
     );
   }
   
@@ -426,13 +436,13 @@ function applyTheme() {
 }
 
 function loadTheme() {
-  const savedTheme = localStorage.getItem('theme');
+  const savedTheme = U.readStorage('theme');
   state.isDarkMode = savedTheme === 'dark';
   applyTheme();
 }
 
 function saveTheme() {
-  localStorage.setItem('theme', state.isDarkMode ? 'dark' : 'light');
+  U.writeStorage('theme', state.isDarkMode ? 'dark' : 'light');
 }
 
 function goHome() {
@@ -442,7 +452,7 @@ function goHome() {
   // Update URL
   const url = new URL(window.location);
   url.searchParams.delete('novel');
-  history.pushState({}, '', url);
+  if (pushHistory && new URL(location.href).searchParams.has('novel')) history.pushState({}, '', url);
   
   renderHomePage();
   window.scrollTo(0, 0);
@@ -477,7 +487,7 @@ function showError(message) {
   elements.homeContent.classList.remove('hidden');
   elements.homeContent.innerHTML = `
     <div class="empty-state">
-      <p>${message}</p>
+      <p>${U.escapeHtml(message)}</p>
       <button class="btn btn-primary" onclick="location.reload()">Thử lại</button>
     </div>
   `;
