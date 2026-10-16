@@ -1,0 +1,32 @@
+name: Static site quality
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check js/utils.js
+      - run: node --check js/app.js
+      - run: node --check js/reader.js
+      - run: node --test tests/*.test.js
+      - name: Validate JSON data
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('novels')
+          catalog=json.loads((root/'index.json').read_text(encoding='utf-8'))
+          for item in catalog['novels']:
+              folder=root/item['id']
+              info=json.loads((folder/'info.json').read_text(encoding='utf-8'))
+              assert info['id']==item['id']
+              for ch in info['chapters']:
+                  assert (folder/ch['file']).is_file(), (item['id'],ch['file'])
+          print('Catalog and chapter files validated')
+          PY
