@@ -440,3 +440,10 @@
     color: #6366f1;
     font-weight: 600;
 }
+/* Accessibility improvements */
+.toolbar-back { border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; text-align: left; }
+:where(button, a, select, input):focus-visible { outline: 3px solid #6366f1; outline-offset: 3px; }
+.chapter-body { overflow-wrap: anywhere; }
+.chapter-body img { max-width: 100%; height: auto; }
+.chapter-body pre { overflow-x: auto; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }

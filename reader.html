@@ -29,7 +29,7 @@
         <!-- Toolbar -->
         <header class="reader-toolbar">
             <div class="toolbar-container">
-                <div class="toolbar-back" id="backBtn">
+                <button type="button" class="toolbar-back" id="backBtn" aria-label="Về thông tin truyện">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="15 18 9 12 15 6"></polyline>
@@ -38,7 +38,7 @@
                         <span class="toolbar-novel" id="toolbarNovel">Tên truyện</span>
                         <span class="toolbar-chapter" id="toolbarChapter">Tên chương</span>
                     </div>
-                </div>
+                </button>
 
                 <div class="toolbar-actions">
                     <button class="toolbar-btn" id="tocBtn" title="Mục lục">
@@ -159,6 +159,7 @@
     </div>
 
     <!-- Scripts -->
+    <script src="js/utils.js"></script>
     <script src="js/reader.js"></script>
 </body>
 
