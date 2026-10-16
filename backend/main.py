@@ -400,6 +400,23 @@ def delete_chapter(book_id: str, chapter_number: int, _: dict = Depends(admin_us
         c.execute("UPDATE books SET updated_at=? WHERE id=?", (now(), book_id))
     return {"ok": True}
 
-# A single-origin deployment avoids cross-site cookies, CORS and mixed-content issues.
-# Keep API declarations above StaticFiles; the latter is a catch-all.
-app.mount("/", StaticFiles(directory=str(ROOT), html=True), name="frontend")
+# Serve only explicitly approved public assets, never backend/ or .env files.
+app.mount("/css", StaticFiles(directory=str(ROOT / "css")), name="css")
+app.mount("/js", StaticFiles(directory=str(ROOT / "js")), name="js")
+
+@app.get("/", include_in_schema=False)
+def home_page():
+    return FileResponse(ROOT / "v3.html")
+
+@app.get("/v3.html", include_in_schema=False)
+def v3_page():
+    return FileResponse(ROOT / "v3.html")
+
+@app.get("/index.html", include_in_schema=False)
+def legacy_home():
+    return FileResponse(ROOT / "index.html")
+
+@app.get("/reader.html", include_in_schema=False)
+def legacy_reader():
+    return FileResponse(ROOT / "reader.html")
+
