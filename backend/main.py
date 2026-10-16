@@ -421,3 +421,7 @@ def legacy_home():
 def legacy_reader():
     return FileResponse(ROOT / "reader.html")
 
+
+@app.get("/admin.html", include_in_schema=False)
+def admin_page():
+    return FileResponse(ROOT / "admin.html")
