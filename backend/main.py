@@ -403,6 +403,7 @@ def delete_chapter(book_id: str, chapter_number: int, _: dict = Depends(admin_us
 # Serve only explicitly approved public assets, never backend/ or .env files.
 app.mount("/css", StaticFiles(directory=str(ROOT / "css")), name="css")
 app.mount("/js", StaticFiles(directory=str(ROOT / "js")), name="js")
+app.mount("/novels", StaticFiles(directory=str(ROOT / "novels")), name="novels")
 
 @app.get("/", include_in_schema=False)
 def home_page():
