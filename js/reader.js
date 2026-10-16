@@ -6,6 +6,8 @@
 // ========================================
 // STATE MANAGEMENT
 // ========================================
+const U = window.NovelUtils;
+let chapterRequest = 0;
 const readerState = {
     novel: null,
     chapters: [],
@@ -42,7 +44,7 @@ const readerElements = {
 };
 
 // Initialize Markdown parser
-const md = window.markdownit();
+const md = typeof window.markdownit === 'function' ? window.markdownit({ html: false, linkify: true }) : null;
 
 // ========================================
 // INITIALIZATION
@@ -59,9 +61,10 @@ async function initReader() {
     // Get URL parameters
     const params = new URLSearchParams(window.location.search);
     const novelId = params.get('novel');
-    const chapterNum = parseInt(params.get('chapter')) || 1;
+    const rawChapter = params.get('chapter');
+    const chapterNum = rawChapter && /^\d+$/.test(rawChapter) ? Number(rawChapter) : 1;
 
-    if (!novelId) {
+    if (!U.validNovelId(novelId)) {
         showReaderError('Không tìm thấy truyện. Vui lòng quay lại trang chủ.');
         return;
     }
@@ -122,9 +125,10 @@ async function loadNovelAndChapter(novelId, chapterNum) {
         const infoResponse = await fetch(`novels/${novelId}/info.json`);
         if (!infoResponse.ok) throw new Error('Failed to load novel info');
 
-        readerState.novel = await infoResponse.json();
+        readerState.novel = U.normalizeNovel(await infoResponse.json());
+        if (readerState.novel.id !== novelId) throw new Error('Novel identifier mismatch');
         readerState.chapters = readerState.novel.chapters;
-        readerState.currentChapterIndex = chapterNum - 1;
+        readerState.currentChapterIndex = readerState.chapters.findIndex(ch => ch.number === chapterNum);
 
         // Validate chapter index
         if (readerState.currentChapterIndex < 0 ||
@@ -194,7 +198,7 @@ async function loadChapter() {
 // ========================================
 function goBackToDetail() {
     if (readerState.novel) {
-        window.location.href = `index.html?novel=${readerState.novel.id}`;
+        window.location.href = `index.html?novel=${encodeURIComponent(readerState.novel.id)}`;
     } else {
         window.location.href = 'index.html';
     }
@@ -227,7 +231,7 @@ function updateNavButtons() {
 
 function updateUrl() {
     const url = new URL(window.location);
-    url.searchParams.set('chapter', readerState.currentChapterIndex + 1);
+    url.searchParams.set('chapter', readerState.chapters[readerState.currentChapterIndex].number);
     history.replaceState({}, '', url);
 }
 
@@ -255,6 +259,7 @@ function toggleSettings() {
 }
 
 function setTheme(theme) {
+    if (!['light','sepia','dark'].includes(theme)) return;
     readerState.settings.theme = theme;
 
     // Update page class
@@ -291,11 +296,18 @@ function handleFontChange(e) {
 }
 
 function loadSettings() {
-    const saved = localStorage.getItem('readerSettings');
+    const saved = U.readStorage('readerSettings');
 
     if (saved) {
         try {
-            readerState.settings = JSON.parse(saved);
+            const data = JSON.parse(saved);
+            if (data && typeof data === 'object') {
+              readerState.settings = {
+                fontSize: Number.isInteger(data.fontSize) ? Math.max(14, Math.min(28, data.fontSize)) : 18,
+                fontFamily: ['font-sans', 'font-serif', 'font-mono'].includes(data.fontFamily) ? data.fontFamily : 'font-sans',
+                theme: ['light', 'sepia', 'dark'].includes(data.theme) ? data.theme : 'light'
+              };
+            }
         } catch (e) {
             console.error('Error parsing saved settings:', e);
         }
@@ -325,7 +337,7 @@ function applySettings() {
 }
 
 function saveSettings() {
-    localStorage.setItem('readerSettings', JSON.stringify(readerState.settings));
+    U.writeStorage('readerSettings', JSON.stringify(readerState.settings));
 }
 
 // ========================================
@@ -334,7 +346,7 @@ function saveSettings() {
 function renderToc() {
     readerElements.tocList.innerHTML = readerState.chapters.map((ch, idx) => `
     <a href="#" class="toc-item ${idx === readerState.currentChapterIndex ? 'active' : ''}" data-index="${idx}">
-      ${ch.title}
+      ${U.escapeHtml(ch.title)}
     </a>
   `).join('');
 
@@ -367,7 +379,7 @@ function showReaderError(message) {
     readerElements.chapterTitle.textContent = 'Lỗi';
     readerElements.chapterBody.innerHTML = `
     <div class="empty-state">
-      <p>${message}</p>
+      <p>${U.escapeHtml(message)}</p>
       <a href="index.html" class="btn btn-primary" style="margin-top: 1rem; display: inline-block;">
         Về trang chủ
       </a>
