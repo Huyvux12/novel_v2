@@ -28,12 +28,12 @@
       </a>
       
       <!-- Search -->
-      <form class="search-form" id="searchForm">
+      <form class="search-form" id="searchForm" role="search">
         <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
-        <input type="text" class="search-input" id="searchInput" placeholder="Tìm kiếm truyện, tác giả...">
+        <input type="text" class="search-input" id="searchInput" aria-label="Tìm kiếm truyện" placeholder="Tìm kiếm truyện, tác giả...">
       </form>
       
       <!-- Actions -->
@@ -60,7 +60,7 @@
           <button class="btn btn-primary">Đăng ký</button>
         </div>
         
-        <button class="menu-toggle" id="menuToggle">
+        <button class="menu-toggle" id="menuToggle" aria-label="Mở menu">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="3" y1="12" x2="21" y2="12"></line>
             <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -113,6 +113,7 @@
   </div>
 
   <!-- Scripts -->
+  <script src="js/utils.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
